@@ -1,7 +1,25 @@
 export default {
   // 获取所有规则
   async getAllRules(env) {
-    return await env.DB.prepare("SELECT * FROM rules").all();
+    return await env.DB.prepare(`
+      SELECT * FROM rules
+      order by
+      case rule_type
+      WHEN 'DOMAIN' THEN 1
+      WHEN 'DOMAIN-SUFFIX' THEN 2
+      WHEN 'DOMAIN-KEYWORD' THEN 3
+      WHEN 'IP-CIDR' THEN 4
+      WHEN 'IP-CIDR6' THEN 5
+      WHEN 'SRC-IP-CIDR' THEN 6
+      WHEN 'SRC-PORT' THEN 7
+      WHEN 'DST-PORT' THEN 8
+      WHEN 'PROCESS-NAME' THEN 9
+      WHEN 'PROCESS-PATH' THEN 10
+      WHEN 'GEOIP' THEN 11
+      WHEN 'MATCH' THEN 12
+      ELSE 13
+        END,
+        id`).all();
   },
   async getRulesCount(env, type, keyWord) {
     const conditions = [];

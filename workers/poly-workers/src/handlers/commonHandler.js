@@ -55,23 +55,22 @@ export default {
                         const [key, value] = part.trim().split('=');  // 添加 trim() 去除空格
                         const trimmedKey = key.trim();  // 确保 key 没有空格
                         const numValue = parseInt(value, 10);
-                        console.log("处理字段:", trimmedKey, "值:", numValue);  // 调试信息
                         
                         switch (trimmedKey) {
                             case 'upload':
-                                console.log("upload key:" + trimmedKey + " numValue:" + numValue);
+                                // console.log("upload key:" + trimmedKey + " numValue:" + numValue);
                                 totalUpload += numValue;
                                 break;
                             case 'download':
-                                console.log("download key:" + trimmedKey + " numValue:" + numValue);
+                                // console.log("download key:" + trimmedKey + " numValue:" + numValue);
                                 totalDownload += numValue;
                                 break;
                             case 'total':
-                                console.log("total key:" + trimmedKey + " numValue:" + numValue);
+                                // console.log("total key:" + trimmedKey + " numValue:" + numValue);
                                 totalTotal += numValue;
                                 break;
                             case 'expire':
-                                console.log("expire key:" + trimmedKey + " numValue:" + numValue);
+                                // console.log("expire key:" + trimmedKey + " numValue:" + numValue);
                                 minExpire = Math.min(minExpire, numValue);
                                 break;
                         }
