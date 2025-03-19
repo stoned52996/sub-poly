@@ -241,13 +241,7 @@ export default {
 
     // 获取rules
     const rules = await ruleRepository.getAllRules(env);
-    const matchRules = [];
-    const normalRules = rules.results.map(rule => {
-      if (rule.rule_type === 'MATCH') {
-        matchRules.push(`${rule.rule_type},${groupMap[rule.rule_config]}`);
-        return null;
-      }
-      
+    const rulesConfig = rules.results.map(rule => {
       if (rule.rule_type === 'DOMAIN-SUFFIX' || rule.rule_type === 'DOMAIN' || rule.rule_type === 'DOMAIN-KEYWORD') {
         return `${rule.rule_type},${rule.rule_param},${groupMap[rule.rule_config]}`;
       } else if (rule.rule_type === 'GEOIP') {
@@ -266,11 +260,11 @@ export default {
         return `${rule.rule_type},${rule.rule_param},${groupMap[rule.rule_config]}`;
       } else if (rule.rule_type === 'PROCESS-NAME' || rule.rule_type === 'PROCESS-PATH') {
         return `${rule.rule_type},${rule.rule_param},${groupMap[rule.rule_config]}`;
+      } else if (rule.rule_type === 'MATCH') {
+        return `${rule.rule_type},${groupMap[rule.rule_config]}`;
       }
-    }).filter(rule => rule !== null);
+    });
 
-    // 合并普通规则和 MATCH 规则
-    const rulesConfig = [...normalRules, ...matchRules];
     commonConfig['rules'] = rulesConfig;
     const yamlData = yaml.dump(commonConfig);
     return {
