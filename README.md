@@ -190,6 +190,15 @@ npm run deploy
 
 ------
 
+## 📝 TODO
+
+| 🔖 清单       | ⏳ 进度             |
+| ------------ | ------------------ |
+| 分组支持 正则表达式   | 🚧 开发中      |
+| 添加kv缓存   | 📈计划中 |
+
+------
+
 ## 📜 许可证
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
