@@ -12,6 +12,7 @@
                 <el-table-column prop="id" label="ID" width="80" />
                 <el-table-column prop="groupName" label="分组名称" min-width="150" />
                 <el-table-column prop="groupType" label="分组类型" min-width="150" />
+                <el-table-column prop="groupRegex" label="正则表达式" min-width="150" />
                 <el-table-column label="测试url" min-width="250" show-overflow-tooltip>
                     <template #default="scope">
                         {{ scope.row.url ? scope.row.url : '❌' }}
@@ -44,6 +45,9 @@
                             :value="groupType.value" />
                     </el-select>
                     <span class="description">分组类型选择保存后不可以更改</span>
+                </el-form-item>
+                <el-form-item label="正则表达式" prop="groupRegex">
+                    <el-input v-model="groupsForm.groupRegex" type="textarea" placeholder="请输入正则表达式 为空则获取所有" />
                 </el-form-item>
                 <el-form-item label="测试URL" prop="url" v-if='groupsForm.groupType != "select"'>
                     <el-input v-model="groupsForm.url" type="textarea" placeholder="请输入测试URL" />
@@ -92,6 +96,7 @@ export default {
         const groupsForm = reactive({
             groupName: '',
             groupType: '',
+            groupRegex: '',
             url: '',
             interval: ''
         });
@@ -104,6 +109,23 @@ export default {
             url: [
                 { required: true, message: '请输入测试地址', trigger: 'blur' },
                 { type: 'url', message: '请输入正确的URL测试地址', trigger: 'blur' }
+            ],
+            groupRegex: [
+                {
+                    validator: (rule, value, callback) => {
+                        if (value) {
+                            try {
+                                new RegExp(value);
+                                callback();
+                            } catch (e) {
+                                callback(new Error('请输入有效的正则表达式'));
+                            }
+                        } else {
+                            callback();
+                        }
+                    },
+                    trigger: 'blur'
+                }
             ]
         };
 
