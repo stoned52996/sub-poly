@@ -190,10 +190,15 @@ export default {
     const proxyGroups = [];
     const dbGroup = await groupRepository.getAllGroups(env);
     dbGroup.results.forEach(group => {
+      const regex = group.group_regex;
+      const newProxies = JSON.parse(JSON.stringify(allProxiesName))
+      const filteredProxies = regex 
+        ? newProxies.filter(name => new RegExp(regex).test(name))
+        : newProxies;
       const proxyGroup = {
         'name': group.group_name,
         'type': group.group_type,
-        'proxies': JSON.parse(JSON.stringify(allProxiesName))
+        'proxies': filteredProxies
       };
       if (group.group_type != 'select') {
         proxyGroup['url'] = group.url;

@@ -26,15 +26,15 @@ export default {
 
     // 添加分组
     async addGroup(request, env) {
-        const { groupName, groupType, url, interval } = await request.json();
-        await groupService.addGroup(env, groupName, groupType, url, interval);
+        const { groupName, groupType, groupRegex, url, interval } = await request.json();
+        await groupService.addGroup(env, groupName, groupType, groupRegex, url, interval);
         return ResponseUtil.success(null, "Group added", 200);
     },
 
     // 修改分组
     async editGroup(request, env) {
-        const { id, groupName, groupType, url, interval } = await request.json();
-        await groupService.editGroup(env, id, groupName, groupType, url, interval);
+        const { id, groupName, groupType, groupRegex, url, interval } = await request.json();
+        await groupService.editGroup(env, id, groupName, groupType, groupRegex, url, interval);
         return ResponseUtil.success(null, "Group updated", 200);
     },
 

@@ -8,6 +8,7 @@ export default {
       id: group.id,
       groupName: group.group_name,
       groupType: group.group_type,
+      groupRegex: group.group_regex,
       url: group.url,
       interval: group.interval,
       createdAt: group.created_at
@@ -20,6 +21,7 @@ export default {
       id: group.id,
       groupName: group.group_name,
       groupType: group.group_type,
+      groupRegex: group.group_regex,
       url: group.url,
       interval: group.interval,
       createdAt: group.created_at
@@ -36,6 +38,7 @@ export default {
       id: group.id,
       grooupName: group.group_name,
       groupType: group.group_type,
+      groupRegex: group.group_regex,
       url: group.url,
       interval: group.interval,
       createdAt: group.created_at
@@ -44,13 +47,13 @@ export default {
 
 
   // 添加分组
-  async addGroup(env, groupName, groupType, url, interval) {
-    return await groupRepository.addGroup(env, groupName, groupType, url, interval);
+  async addGroup(env, groupName, groupType, groupRegex, url, interval) {
+    return await groupRepository.addGroup(env, groupName, groupType, groupRegex, url, interval);
   },
 
   // 修改分组
-  async editGroup(env, id, groupName, groupType, url, interval) {
-    return await groupRepository.editGroup(env, id, groupName, groupType, url, interval);
+  async editGroup(env, id, groupName, groupType, groupRegex, url, interval) {
+    return await groupRepository.editGroup(env, id, groupName, groupType, groupRegex, url, interval);
   },
 
   // 删除分组
