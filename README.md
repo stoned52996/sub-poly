@@ -69,10 +69,13 @@ wrangler d1 create subPoly
 
 ```bash
 # 返回项目根目录
-cd ../..
+cd db
 
-# 执行数据库脚本
+# 执行基础数据库脚本导入
 wrangler d1 execute subPoly --file=./base.sql --remote
+
+# 执行新增数据库脚本导入 注意:除了base.sql 其他的都是新增数据库脚本 将其他的所有的脚本都执行一下下面的命令
+wrangler d1 execute subPoly --file=./新增脚本.sql --remote
 ```
 
 ![脚本执行](https://raw.githubusercontent.com/icutool/img/refs/heads/main/img_v3_02kh_969edd77-6090-4a0e-867a-37ec341fb60g.jpg)
