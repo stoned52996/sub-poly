@@ -32,3 +32,4 @@ coverage
 # wrangler files
 .wrangler
 .dev.vars*
+.env.production
