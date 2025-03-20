@@ -14,7 +14,7 @@ export default {
   },
 
   // 添加分组
-  async addGroup(env, groupName, groupType, url, interval) {
+  async addGroup(env, groupName, groupType, groupRegex, url, interval) {
     const lasteResult = await env.DB.prepare("SELECT * FROM groups order by id desc").first();
     let newId;
     if(lasteResult == null) {
@@ -23,17 +23,17 @@ export default {
       newId = lasteResult.id + 1
     }
     const result = await env.DB.prepare(
-      "INSERT INTO groups (id, group_name, group_type, url, interval) VALUES (?, ?, ?, ?, ?)"
-    ).bind(newId, groupName, groupType, url, interval).run();
+      "INSERT INTO groups (id, group_name, group_type, group_regex, url, interval) VALUES (?, ?, ?, ?, ?, ?)"
+    ).bind(newId, groupName, groupType, groupRegex, url, interval).run();
     console.log("newId:" + newId);
-    return { id: newId, groupName, groupType, url, interval };
+    return { id: newId, groupName, groupType, groupRegex, url, interval };
   },
 
   // 修改分组
-  async editGroup(env, id, groupName, groupType, url, interval) {
+  async editGroup(env, id, groupName, groupType, groupRegex, url, interval) {
     await env.DB.prepare(
-      "UPDATE groups SET group_name = ?, group_type = ?, url = ?, interval = ? WHERE id = ?"
-    ).bind(groupName, groupType, url, interval, id).run();
+      "UPDATE groups SET group_name = ?, group_type = ?, group_regex = ?, url = ?, interval = ? WHERE id = ?"
+    ).bind(groupName, groupType, groupRegex, url, interval, id).run();
   },
 
   // 删除分组
