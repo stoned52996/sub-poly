@@ -18,6 +18,10 @@
           <img src="@/assets/icons/dashboard.svg" class="nav-icon" alt="airport" />
           <span v-if="!isCollapsed" class="logo-text">机场管理</span>
         </router-link>
+        <router-link to="/selfNode" class="nav-item" active-class="active">
+          <img src="@/assets/icons/settings-accessibility.svg" class="nav-icon" alt="selfNode" />
+          <span v-if="!isCollapsed" class="logo-text">自建节点</span>
+        </router-link>
         <router-link to="/rule" class="nav-item" active-class="active">
           <img src="@/assets/icons/analytics.svg" class="nav-icon" alt="rule" />
           <span v-if="!isCollapsed" class="logo-text">规则管理</span>
