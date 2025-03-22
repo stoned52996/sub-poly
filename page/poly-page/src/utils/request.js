@@ -224,4 +224,31 @@ export const userApi = {
   }
 };
 
+export const selfNodeApi = {
+  // 获取所有自建节点
+  getAllNodes() {
+    return service.get('/selfNode/all');
+  },
+
+  // 获取单个节点
+  getNodeSingle(id) {
+    return service.get(`/selfNode/single?id=${id}`);
+  },
+
+  // 创建节点
+  createNode(data) {
+    return service.post('/selfNode/add', data);
+  },
+
+  // 更新节点
+  updateNode(data) {
+    return service.post(`/selfNode/update`, data);
+  },
+
+  // 删除节点
+  deleteNode(id) {
+    return service.get(`/selfNode/del?id=${id}`);
+  }
+};
+
 export default service;
