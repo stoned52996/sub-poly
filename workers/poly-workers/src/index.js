@@ -3,6 +3,7 @@ import ruleHandler from "./handlers/ruleHandler.js";
 import groupHandler from "./handlers/groupHandlers.js"
 import commonHandler from "./handlers/commonHandler.js"
 import ResponseUtil from './utils/ResponseUtil.js';
+import converterHandlers from "./handlers/converterHandlers.js";
 
 export default {
   async fetch(request, env) {
@@ -153,6 +154,13 @@ export default {
         const token = url.searchParams.get('token');
         const oldToken = url.searchParams.get('oldToken');
         return await commonHandler.setToken(env, token, oldToken);
+      }
+    }
+
+    else if (url.pathname.startsWith("/converter")) {
+      if (url.pathname === "/converter" && method === "GET") {
+        const sub = url.searchParams.get('sub');
+        return await converterHandlers.converter(env, sub);
       }
     }
 
