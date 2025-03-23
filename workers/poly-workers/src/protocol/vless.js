@@ -7,14 +7,15 @@ class VlessConverter {
             name: decodeURIComponent(url.hash.substring(1)) || 'VLESS Node',
             type: 'vless',
             server: url.hostname,
-            port: parseInt(url.port),
+            port: parseInt(url.port) || 443,
             uuid: url.username,
             udp: true,
             tls: true,
             network: params.get('type') || 'tcp',
             'skip-cert-verify': params.get('allowInsecure') === '1',
             servername: params.get('sni') || url.hostname,
-            flow: params.get('flow') || ''
+            flow: params.get('flow') || '',
+            'client-fingerprint': params.get('fp') || ''
         };
 
         // 处理 WS 配置

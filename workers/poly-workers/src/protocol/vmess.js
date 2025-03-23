@@ -11,14 +11,14 @@ class VmessConverter {
 
         return {
             name: config.ps || 'VMess Node',
-            type: 'vmess',
             server: config.add,
             port: parseInt(config.port),
+            type: 'vmess',
             uuid: config.id,
             alterId: parseInt(config.aid),
             cipher: config.type || 'auto',
             udp: true,
-            tls: config.tls === 'tls',
+            tls: config.tls === 'tls'? true : false,
             'skip-cert-verify': config.verify_cert === false,
             network: config.net || 'tcp',
             'ws-opts': config.net === 'ws' ? {
