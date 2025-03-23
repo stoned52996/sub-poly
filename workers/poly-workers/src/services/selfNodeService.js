@@ -8,6 +8,7 @@ export default {
         try {
             let protocol;
             if (link.startsWith('vmess://')) protocol = 'vmess';
+            else if (link.startsWith('vless://')) protocol = 'vless';
             else if (link.startsWith('trojan://')) protocol = 'trojan';
             else if (link.startsWith('ss://')) protocol = 'ss';
             else if (link.startsWith('ssr://')) protocol = 'ssr';

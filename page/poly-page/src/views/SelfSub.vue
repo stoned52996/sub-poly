@@ -4,6 +4,10 @@
             <h1>自建节点管理</h1>
             <el-button type="primary" @click="showAddDialog">添加节点</el-button>
         </div>
+        <div class="sub-desc">
+            <!-- 页面描述介绍 -->
+            <pre>描述: {{ tabDesc }}</pre>
+        </div>
 
         <!-- 节点列表 -->
         <div class="self-sub-list">
@@ -62,6 +66,7 @@ export default {
         const dialogType = ref('add');
         const submitLoading = ref(false);
         const currentId = ref(null);
+        const tabDesc = ref('支持自建节点导入 协议支持 VMess Vless Trojan Shadowsocks hadowsocksR Hysteria Hysteria2 如需修改节点名 请导入后修改转换后的clash格式字段内容');
 
         const nodeForm = reactive({
             link: '',
@@ -185,6 +190,7 @@ export default {
             showAddDialog,
             handleEdit,
             handleDelete,
+            tabDesc,
             submitForm
         };
     }
@@ -220,5 +226,16 @@ export default {
 .dialog-footer {
     display: flex;
     justify-content: flex-end;
+}
+
+.sub-desc {
+    font-size: 14px;
+    color: #909399;
+    word-wrap: break-word;
+    /* 自动换行 */
+    overflow: hidden;
+    /* 隐藏溢出内容 */
+    text-overflow: ellipsis;
+    /* 使用省略号表示溢出 */
 }
 </style>

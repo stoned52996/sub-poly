@@ -4,12 +4,14 @@ import ShadowsocksConverter from '../protocol/shadowsocks.js';
 import ShadowsocksRConverter from '../protocol/shadowsocksr.js';
 import HysteriaConverter from '../protocol/hysteria.js';
 import Hysteria2Converter from '../protocol/hysteria2.js';
+import VlessConverter from '../protocol/vless.js';
 
 class Sub2Clash {
     // 协议转换入口
     static convert(protocol, link) {
         switch (protocol) {
             case 'vmess': return VmessConverter.parse(link);
+            case 'vless': return VlessConverter.parse(link);
             case 'trojan': return TrojanConverter.parse(link);
             case 'ss': return ShadowsocksConverter.parse(link);
             case 'ssr': return ShadowsocksRConverter.parse(link);
