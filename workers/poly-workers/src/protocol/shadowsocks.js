@@ -5,14 +5,16 @@ class ShadowsocksConverter {
 
         if (ssLink.includes('@')) {
             // SIP002 格式
+            const name = ssLink.split('#')[1];
             const [userInfo, serverInfo] = ssLink.split('@');
             const [hostname, ...portAndParams] = serverInfo.split(':');
             const [port, ...params] = portAndParams.join(':').split('#')[0].split('?');
             const decoded = atob(userInfo);
-            const [method, password] = decoded.split(':');
+            const [cipher, password] = decoded.split(':');
             
             config = {
-                method,
+                name: name,
+                cipher,
                 password,
                 server: hostname,
                 port: parseInt(port)
@@ -33,12 +35,14 @@ class ShadowsocksConverter {
             }
         } else {
             // 旧格式
+            const name = ssLink.split('#')[1];
             const decoded = atob(ssLink.split('#')[0]);
-            const [method, rest] = decoded.split(':');
+            const [cipher, rest] = decoded.split(':');
             const [password, server, port] = rest.split('@');
             
             config = {
-                method,
+                name: name,
+                cipher,
                 password,
                 server,
                 port: parseInt(port)
@@ -46,7 +50,6 @@ class ShadowsocksConverter {
         }
 
         return {
-            name: 'SS Node',
             type: 'ss',
             ...config,
             udp: true

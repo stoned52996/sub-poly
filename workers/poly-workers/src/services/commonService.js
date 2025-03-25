@@ -95,12 +95,13 @@ export default {
   async setToken(env, tokenInfo, oldToken) {
     const token = await commonRepository.getInfoByType(env, 'token');
     const jsonData = JSON.stringify({token: tokenInfo});
-    console.log('11111111');
+    console.log(jsonData);
     if (token) {
       console.log('更新');
       // 判断token是否正确
       const obj = JSON.parse(token.json);
       if (obj.token !== oldToken) return null;
+      console.log('更新111');
       await commonRepository.updateCommon(env, 'token', jsonData);
     } else {
       return null;
@@ -159,14 +160,14 @@ export default {
     const airports = await airportRepository.getAllOpenAirports(env);
     console.log("airports");
     console.log(JSON.stringify(airports));
-    if (airports.results .length == 0) {
-      console.log('没有机场');
-      return null;
-    }
     // 从数据库查询自建节点
     const selfNodes = await selfNodeRepository.getAllNodes(env)
     console.log("selfNodes");
     console.log(JSON.stringify(selfNodes.results));
+    if (airports.results .length == 0 && selfNodes.results.length == 0) {
+      console.log('没有机场');
+      return null;
+    }
     // 生成proxies
     const allProxies = [];
     const allProxiesName = [];

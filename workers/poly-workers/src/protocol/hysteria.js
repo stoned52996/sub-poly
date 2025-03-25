@@ -7,7 +7,7 @@ class HysteriaConverter {
             name: decodeURIComponent(url.hash.substring(1)) || 'Hysteria Node',
             type: 'hysteria',
             server: url.hostname,
-            port: parseInt(url.port),
+            port: parseInt(url.port) || 443,
             auth_str: params.get('auth') || '',
             obfs: params.get('obfs') || '',
             alpn: params.get('alpn') ? params.get('alpn').split(',') : ['h3'],

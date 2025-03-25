@@ -101,10 +101,16 @@ export default {
         return ResponseUtil.success(config, "success", 200);
     },
 
-    async setToken(env, tokenInfo, oldToken) {
-        const token = await commonService.setToken(env, tokenInfo, oldToken);
+    async setToken(env, request) {
+        const jsonData = await request.json();
+        console.log("jsonData:" + jsonData);
+        const newToken = jsonData.token;
+        console.log("newToken:" + newToken);
+        const oldToken = jsonData.oldToken;
+        console.log("oldToken:" + oldToken);
+        const token = await commonService.setToken(env, newToken, oldToken);
         if (token == null) {
-            return ResponseUtil.error(null, "token error", 500);
+            return ResponseUtil.error("token error", 500);
         }
         return ResponseUtil.success(token, "success", 200);
     },

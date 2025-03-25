@@ -64,6 +64,8 @@ export default {
                     ElMessage.success('重置成功');
                     localStorage.setItem('token', res.data.token)
                     resetDialogVisible.value = false;
+                } else {
+                    ElMessage.error(res.message);
                 }
             } catch (err) {
                 ElMessage.error('重置失败');
