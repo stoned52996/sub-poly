@@ -3,6 +3,7 @@ import ruleHandler from "./handlers/ruleHandler.js";
 import groupHandler from "./handlers/groupHandlers.js"
 import commonHandler from "./handlers/commonHandler.js"
 import ResponseUtil from './utils/ResponseUtil.js';
+import selfNodeHandler from "./handlers/selfNodeHandler.js";
 
 export default {
   async fetch(request, env) {
@@ -149,10 +150,28 @@ export default {
     }
 
     else if (url.pathname.startsWith("/user")) {
-      if (url.pathname === "/user/reset" && method === "GET") {
-        const token = url.searchParams.get('token');
-        const oldToken = url.searchParams.get('oldToken');
-        return await commonHandler.setToken(env, token, oldToken);
+      if (url.pathname === "/user/reset" && method === "POST") {
+        return await commonHandler.setToken(env, request);
+      }
+    }
+
+    else if (url.pathname.startsWith("/selfNode")) {
+      if (url.pathname === "/selfNode/add" && method === "POST") {
+        return await selfNodeHandler.addNode(request, env);
+      }
+      else if (url.pathname === "/selfNode/all" && method === "GET") {
+        return await selfNodeHandler.getAllNodes(env);
+      }
+      else if (url.pathname === "/selfNode/single" && method === "GET") {
+        const id = url.searchParams.get('id');
+        return await selfNodeHandler.getNodeById(env, id);
+      }
+      else if (url.pathname === "/selfNode/update" && method === "POST") {
+        return await selfNodeHandler.editNode(request, env);
+      }
+      else if (url.pathname === "/selfNode/del" && method === "GET") {
+        const id = url.searchParams.get('id');
+        return await selfNodeHandler.deleteNode(env, id);
       }
     }
 

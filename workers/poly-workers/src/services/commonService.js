@@ -2,6 +2,7 @@ import commonRepository from "../db/commonRepository.js";
 import airportRepository from "../db/airportRepository.js";
 import groupRepository from "../db/groupRepository.js";
 import ruleRepository from "../db/ruleRepository.js";
+import selfNodeRepository from "../db/selfNodeRepository.js";
 import yaml from 'js-yaml';
 import axios from 'axios';
 
@@ -94,12 +95,13 @@ export default {
   async setToken(env, tokenInfo, oldToken) {
     const token = await commonRepository.getInfoByType(env, 'token');
     const jsonData = JSON.stringify({token: tokenInfo});
-    console.log('11111111');
+    console.log(jsonData);
     if (token) {
       console.log('更新');
       // 判断token是否正确
       const obj = JSON.parse(token.json);
       if (obj.token !== oldToken) return null;
+      console.log('更新111');
       await commonRepository.updateCommon(env, 'token', jsonData);
     } else {
       return null;
@@ -158,13 +160,24 @@ export default {
     const airports = await airportRepository.getAllOpenAirports(env);
     console.log("airports");
     console.log(JSON.stringify(airports));
-    if (airports.results .length == 0) {
+    // 从数据库查询自建节点
+    const selfNodes = await selfNodeRepository.getAllNodes(env)
+    console.log("selfNodes");
+    console.log(JSON.stringify(selfNodes.results));
+    if (airports.results .length == 0 && selfNodes.results.length == 0) {
       console.log('没有机场');
       return null;
     }
     // 生成proxies
     const allProxies = [];
     const allProxiesName = [];
+    selfNodes.results.forEach(node => {
+      // 字符串转对象
+      const nodeObj = JSON.parse(node.convert);
+      allProxiesName.push(nodeObj.name);
+      allProxies.push(nodeObj);
+    })
+    
     for (const airport of airports.results) {
       const result = await this.getYmlFromUrl(airport.subscription_url); // 使用await等待Promise解析
       const yml = result.jsonData;

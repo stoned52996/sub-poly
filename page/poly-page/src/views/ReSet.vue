@@ -57,13 +57,15 @@ export default {
 
         const resetKey = async () => {
             try {
-                const res = await userApi.reset(currentKey.value, newKey.value);
+                const res = await userApi.reset({oldToken:currentKey.value, token:newKey.value});
                 if (res.code === 200) {
                     currentKey.value = '';
                     newKey.value = '';
                     ElMessage.success('重置成功');
                     localStorage.setItem('token', res.data.token)
                     resetDialogVisible.value = false;
+                } else {
+                    ElMessage.error(res.message);
                 }
             } catch (err) {
                 ElMessage.error('重置失败');

@@ -6,6 +6,7 @@ import GroupView from '../views/GroupView.vue'
 import Sub from '../views/Sub.vue'
 import CommonConfig from '../views/CommonConfig.vue'
 import ReSet from '../views/ReSet.vue'
+import SelfSub from '../views/SelfSub.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/reset',
       name: 'reset',
       component: ReSet,
+    },
+    {
+      path: '/selfNode',
+      name: 'selfNode',
+      component: SelfSub,
     },
   ],
 })
