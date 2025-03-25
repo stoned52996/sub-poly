@@ -150,9 +150,10 @@ export default {
     }
 
     else if (url.pathname.startsWith("/user")) {
-      if (url.pathname === "/user/reset" && method === "GET") {
-        const token = url.searchParams.get('token');
-        const oldToken = url.searchParams.get('oldToken');
+      if (url.pathname === "/user/reset" && method === "POST") {
+        const jsonData = JSON.stringify(await request.json());
+        const token = jsonData.token;
+        const oldToken = jsonData.oldToken;
         return await commonHandler.setToken(env, token, oldToken);
       }
     }

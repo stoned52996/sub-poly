@@ -219,8 +219,8 @@ export const configApi = {
 
 export const userApi = {
   // 获取所有规则
-  reset(oldToken, token) {
-    return service.get(`/user/reset?oldToken=${oldToken}&token=${token}`);
+  reset(data) {
+    return service.post(`/user/reset`, data);
   }
 };
 

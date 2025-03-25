@@ -2,6 +2,7 @@ import commonRepository from "../db/commonRepository.js";
 import airportRepository from "../db/airportRepository.js";
 import groupRepository from "../db/groupRepository.js";
 import ruleRepository from "../db/ruleRepository.js";
+import selfNodeRepository from "../db/selfNodeRepository.js";
 import yaml from 'js-yaml';
 import axios from 'axios';
 
@@ -162,9 +163,20 @@ export default {
       console.log('没有机场');
       return null;
     }
+    // 从数据库查询自建节点
+    const selfNodes = await selfNodeRepository.getAllNodes(env)
+    console.log("selfNodes");
+    console.log(JSON.stringify(selfNodes.results));
     // 生成proxies
     const allProxies = [];
     const allProxiesName = [];
+    selfNodes.results.forEach(node => {
+      // 字符串转对象
+      const nodeObj = JSON.parse(node.convert);
+      allProxiesName.push(nodeObj.name);
+      allProxies.push(nodeObj);
+    })
+    
     for (const airport of airports.results) {
       const result = await this.getYmlFromUrl(airport.subscription_url); // 使用await等待Promise解析
       const yml = result.jsonData;

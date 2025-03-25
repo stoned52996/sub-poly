@@ -57,7 +57,7 @@ export default {
 
         const resetKey = async () => {
             try {
-                const res = await userApi.reset(currentKey.value, newKey.value);
+                const res = await userApi.reset({oldToken:currentKey.value, token:newKey.value});
                 if (res.code === 200) {
                     currentKey.value = '';
                     newKey.value = '';
