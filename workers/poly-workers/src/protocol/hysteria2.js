@@ -14,7 +14,6 @@ class Hysteria2Converter {
             mport: params.get('mport'),
             password: url.username,
             udp: true,
-            'skip-cert-verify': true,
             obfs: params.get('obfs') || '',
             'obfs-password': params.get('obfs-password') || '',
             sni: params.get('sni') || url.hostname,
