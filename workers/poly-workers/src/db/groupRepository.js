@@ -22,6 +22,7 @@ export default {
     } else {
       newId = lasteResult.id + 1
     }
+    console.log("newId:" + newId);
     const result = await env.DB.prepare(
       "INSERT INTO groups (id, group_name, group_type, group_regex, url, interval) VALUES (?, ?, ?, ?, ?, ?)"
     ).bind(newId, groupName, groupType, groupRegex, url, interval).run();

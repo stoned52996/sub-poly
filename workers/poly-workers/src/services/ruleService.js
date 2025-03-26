@@ -93,7 +93,7 @@ export default {
     // 获取所有的分组
     for (const group of groups) {
       if (group.type === 'select') {
-        const single = await groupRepository.addGroup(env, group.name, group.type, null, null)
+        const single = await groupRepository.addGroup(env, group.name, group.type, null, null, null)
         groupInDb[group.name] = single
       }
     }
@@ -137,9 +137,7 @@ export default {
 
   async getYmlFromUrl(url) {
     // 如果以 &flag=clash结尾
-    if (!url.endsWith('&flag=clashVerge')) {
-      url = url + '&flag=clashVerge';
-    }
+    url = await this.ensureFlagInUrl(url);
     console.log("url: " + url);
     try {
       const response = await axios.get(url); // 使用await等待响应
@@ -153,6 +151,23 @@ export default {
     } catch (error) {
       console.error('Error fetching URL:', error);
       return null;
+    }
+  },
+
+  async ensureFlagInUrl(urlString) {
+    try {
+      let url = new URL(urlString);
+      let params = url.searchParams;
+  
+      // 如果已经包含 flag=clashVerge，则直接返回
+      if (!params.has('flag')) {
+        params.set('flag', 'clashVerge'); // 添加 flag=clashVerge
+      }
+  
+      return url.toString(); // 返回修改后的 URL
+    } catch (error) {
+      console.error('Invalid URL:', error);
+      return urlString; // 如果 URL 无效，返回原始字符串
     }
   },
 
