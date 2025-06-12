@@ -64,7 +64,13 @@ wrangler d1 create subPoly
 
 ![创建数据库](https://raw.githubusercontent.com/stoned52996/img/refs/heads/main/img_v3_02kh_c952a4a0-ade5-4be1-919e-979e7d64c69g.jpg)
 
-✅ **请记录生成的 database_name 和 database_id，后续配置将会用到**
+#### 📝 配置数据库连接
+
+编辑 `workers/poly-workers/wrangler.jsonc` 文件，更新以下字段：
+
+- 将 `database_name` 和 `database_id` 修改为刚刚创建的数据库信息
+
+![修改配置文件](https://raw.githubusercontent.com/stoned52996/img/refs/heads/main/Snipaste_2025-03-19_14-51-36.png)
 
 #### 🏗️ 初始化数据库
 
@@ -84,14 +90,6 @@ wrangler d1 execute subPoly --file=./新增脚本.sql --remote
 ------
 
 ### 🖥️ 3. 后端部署
-
-#### 📝 配置数据库连接
-
-编辑 `workers/poly-workers/wrangler.jsonc` 文件，更新以下字段：
-
-- 将 `database_name` 和 `database_id` 修改为之前创建的数据库信息
-
-![修改配置文件](https://raw.githubusercontent.com/stoned52996/img/refs/heads/main/Snipaste_2025-03-19_14-51-36.png)
 
 #### 🚀 部署后端服务
 
