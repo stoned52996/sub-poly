@@ -1,94 +1,87 @@
-import axios from 'axios';
 import { ElMessageBox } from 'element-plus';
+
 let tokenPromise = null;
 let tokenRespPromise = null;
-// 创建axios实例
-const service = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE,
-  timeout: 15000
-});
 
-// 请求拦截器
-service.interceptors.request.use(
-  async config => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      if (!tokenPromise) {
-        tokenPromise = ElMessageBox.prompt('请输入访问秘钥', '配置访问秘钥', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /\S+/,
-          inputErrorMessage: '访问秘钥不能为空'
-        }).then(({ value }) => {
-          localStorage.setItem('token', value);
-          tokenPromise = null;
-          return value;
-        }).catch(err => {
-          tokenPromise = null;
-          return Promise.reject(new Error('用户取消输入访问秘钥'));
-        });
-      }
-      
-      try {
-        const value = await tokenPromise;
-        config.headers['Authorization'] = `${value}`;
-      } catch (err) {
-        return Promise.reject(err);
-      }
-    } else {
-      config.headers['Authorization'] = `${token}`;
-    }
-    return config;
-  },
-  error => {
-    console.error('请求错误:', error);
-    return Promise.reject(error);
+const promptForToken = async (message = '请输入访问秘钥') => {
+  if (!tokenPromise) {
+    tokenPromise = ElMessageBox.prompt(message, '配置访问秘钥', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      inputPattern: /\S+/,
+      inputErrorMessage: '访问秘钥不能为空'
+    }).then(({ value }) => {
+      localStorage.setItem('token', value);
+      tokenPromise = null;
+      return value;
+    }).catch(err => {
+      tokenPromise = null;
+      return Promise.reject(new Error('用户取消输入访问秘钥'));
+    });
   }
-);
+  return tokenPromise;
+};
 
-// 响应拦截器
-service.interceptors.response.use(
-  async response => {
-    if (response.data.code === 401) {
-      if (!tokenRespPromise) {
-        tokenRespPromise = ElMessageBox.prompt('访问秘钥无效，请重新输入', '配置访问秘钥', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /\S+/,
-          inputErrorMessage: '访问秘钥不能为空'
-        }).then(({ value }) => {
-          localStorage.setItem('token', value);
-          tokenRespPromise = null;
-          return value;
-        }).catch(err => {
-          tokenRespPromise = null;
-          return Promise.reject(new Error('用户取消输入访问秘钥'));
-        });
-      }
-      
-      try {
-        const newToken = await tokenRespPromise;
-        // 使用新的token重新发起请求
-        const config = response.config;
-        config.headers['Authorization'] = newToken;
-        return service(config).then(res => res);
-      } catch (err) {
-        return Promise.reject(err);
-      }
+const makeRequest = async (method, path, data) => {
+  const base = import.meta.env.VITE_API_BASE || '';
+  const url = base + path;
+
+  let token = localStorage.getItem('token');
+  if (!token) {
+    try {
+      token = await promptForToken();
+    } catch (e) {
+      return Promise.reject(e);
     }
-    return response.data;
-  },
-  error => {
-    console.error('响应错误:', error);
-    return Promise.reject(error);
   }
-);
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `${token}`
+  };
+
+  const opts = {
+    method,
+    headers,
+    redirect: 'follow'
+  };
+  if (method !== 'GET' && data !== undefined) opts.body = JSON.stringify(data);
+
+  const resp = await fetch(url, opts);
+  let body = null;
+  try {
+    body = await resp.json();
+  } catch (e) {
+    // 如果不是 JSON，返回文本
+    const txt = await resp.text();
+    body = txt;
+  }
+
+  if (body && body.code === 401) {
+    // prompt for new token and retry once
+    try {
+      const newToken = await (tokenRespPromise || (tokenRespPromise = promptForToken('访问秘钥无效，请重新输入')));
+      tokenRespPromise = null;
+      headers['Authorization'] = newToken;
+      const retryResp = await fetch(url, Object.assign({}, opts, { headers }));
+      try {
+        return await retryResp.json();
+      } catch (e) {
+        return await retryResp.text();
+      }
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  return body;
+};
 
 // 机场相关接口
 export const airportApi = {
   // 获取所有机场
   getAirports() {
-    return service.get('/airports/all');
+    return makeRequest('GET', '/airports/all');
   },
 
   // 获取单个机场
