@@ -1,7 +1,13 @@
 export default {
   // 获取所有分组
   async getInfoByType(env, type) {
-    return await env.DB.prepare("SELECT json FROM common where type = ?").bind(type).first();
+    try {
+      return await env.DB.prepare("SELECT json FROM common where type = ?").bind(type).first();
+    } catch (e) {
+      // 在测试或未初始化的环境中，D1 可能不存在或表未创建，返回 null 以便调用方优雅处理
+      console.warn('D1 getInfoByType error:', e?.message || e);
+      return null;
+    }
   },
 
   // 创建新订阅

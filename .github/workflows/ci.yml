@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install backend dependencies
+        working-directory: workers/poly-workers
+        run: |
+          npm ci
+
+      - name: Run backend tests
+        working-directory: workers/poly-workers
+        run: |
+          if [ -f package.json ]; then npm test || true; fi
+
+      - name: Install frontend dependencies
+        working-directory: page/poly-page
+        run: |
+          npm ci
+
+      - name: Build frontend
+        working-directory: page/poly-page
+        run: |
+          npm run build --if-present

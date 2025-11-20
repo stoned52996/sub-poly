@@ -9,7 +9,7 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { marked } from 'marked'
-import axios from 'axios'
+
 
 export default {
     setup() {
@@ -17,8 +17,9 @@ export default {
 
         const fetchMarkdown = async () => {
             try {
-                const response = await axios.get('https://raw.githubusercontent.com/stoned52996/sub-poly/refs/heads/master/README.md')
-                markdownContent.value = marked(response.data)
+                const res = await fetch('https://raw.githubusercontent.com/stoned52996/sub-poly/refs/heads/master/README.md')
+                const txt = await res.text()
+                markdownContent.value = marked(txt)
             } catch (error) {
                 console.error('Failed to fetch markdown:', error)
             }
